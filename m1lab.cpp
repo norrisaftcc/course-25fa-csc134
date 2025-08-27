@@ -13,7 +13,7 @@ using namespace std;
 int main() {
     // start program
     // declare all of our variables ("whiteboards")
-    string item_name = "gem"; // replace with your item
+    string item_name = "cheezburgers"; // replace with your item
     int    num_items = 10; 
     double cost_per  = 0.25;
 
@@ -23,7 +23,9 @@ int main() {
     cout << "We have " << num_items << " total." << endl;
     // do the processing
     double total_cost = num_items * cost_per;
-    
+    // Print the output
+    cout << "Buying them all will cost: $" << total_cost << endl;
+    cout << "Thanks for shopping with us!" << endl;
 
     // end program
     return 0;
