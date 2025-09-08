@@ -1,6 +1,6 @@
 /*
 CSC 134
-M2LAB - Case Study with Crates
+M2LAB1 - Case Study with Crates
 Norrisa
 9/8/25
 
