@@ -31,24 +31,23 @@ int main() {
     int roll2;
     int point;      // roll if it doesn't immediately win/lose
 
-    // Blatantly cheat
-    cout << "Enter two dice (press ENTER between) ";
-    cin >> roll1;
-    cin >> roll2;
+    // Roll the dice
+    roll1 = roll();
+    roll2 = roll();
     int sum = roll1+roll2;
-
+    cout << "ROLL: " << sum << endl;
     // win on 7 or 11
     if ( (sum == 7) || (sum == 11) ) {
-        cout << "🎲Seven or Eleven -- You win!" << endl;
+        cout << "🎲 Seven or Eleven -- You win!" << endl;
     }
     // lose on 2, 3, 12
     else if ( (sum == 2) || (sum == 3) || (sum == 12) ) {
-        cout << "🎲2,3,12 -- Sorry, you lose." << endl;
+        cout << "🎲 2,3,12 -- Sorry, you lose." << endl;
     }
     else {
         // set the point
         point = sum;
-        cout << "Rolled a point." << endl;
+        cout << "🎲 Rolled a point. " << endl;
         cout << "Your point is: " << point << endl;
     }
 
