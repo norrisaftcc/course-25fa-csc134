@@ -7,10 +7,8 @@ Beginning of the craps game.
 */
 
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
-
-
+#include <cstdlib>  // for rand() and srand()
+#include <ctime>    // for time()
 using namespace std;
 
 // DECLARE Helper Functions 
@@ -30,7 +28,8 @@ int main() {
     int roll1;
     int roll2;
     int point;      // roll if it doesn't immediately win/lose
-
+    // Seed RNG before roll
+    srand(time(0));
     // Roll the dice
     roll1 = roll();
     roll2 = roll();
@@ -57,8 +56,7 @@ int main() {
 
 // DEFINE Helper Functions
 int roll() {
-    // rolls a six sided die
-    // TODO
-    return 6;
-
+    int my_roll;
+    my_roll = (rand() % 6) + 1; // 1-6
+    return my_roll;
 }
