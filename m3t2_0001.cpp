@@ -37,13 +37,18 @@ int main() {
     cin >> roll2;
     int sum = roll1+roll2;
 
-    if (sum == 7) {
-        cout << "Lucky Seven -- You win!" << endl;
+    // win on 7 or 11
+    if ( (sum == 7) || (sum == 11) ) {
+        cout << "🎲Seven or Eleven -- You win!" << endl;
+    }
+    // lose on 2, 3, 12
+    else if ( (sum == 2) || (sum == 3) || (sum == 12) ) {
+        cout << "🎲2,3,12 -- Sorry, you lose." << endl;
     }
     else {
         // set the point
         point = sum;
-        cout << "Did not roll a seven." << endl;
+        cout << "Rolled a point." << endl;
         cout << "Your point is: " << point << endl;
     }
 
