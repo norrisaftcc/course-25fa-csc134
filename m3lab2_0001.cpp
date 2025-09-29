@@ -30,11 +30,33 @@ void letter_grader() {
     // respond with a letter grade
     double num_grade;
     string letter_grade;
+    // constants for grade breakpoints
+    const double A_GRADE = 90; // (or higher)
+    const double B_GRADE = 80;
+    const double C_GRADE = 70;
+    const double D_GRADE = 60;
+
+
     cout << "Enter a number grade 0-100: ";
     cin >> num_grade;
 
     // Create the if statements
-    letter_grade = "A";
+    if (num_grade >= A_GRADE) {
+        letter_grade = "A";
+    }
+    else if (num_grade >= B_GRADE) {
+        letter_grade = "B";
+    }
+    else if (num_grade >= C_GRADE) {
+        letter_grade = "C";
+    }
+    else if (num_grade >= D_GRADE) {
+        letter_grade = "D";
+    }
+    else {
+        // must be under a D...
+        letter_grade = "F";
+    }
 
     // Output the answer
     cout << "A number grade of " << num_grade << " is: " << letter_grade;
