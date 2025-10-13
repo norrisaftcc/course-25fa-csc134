@@ -1,0 +1,213 @@
+:: StoryTitle
+Tavern to Throne (Harlowe)
+
+
+:: StoryData
+{
+  "ifid": "304B47A3-C2EE-405B-BA71-679FA2E3A8DE",
+  "format": "Harlowe",
+  "format-version": "3.3.9",
+  "start": "Tavern",
+  "zoom": 1
+}
+
+
+:: Castle {"position":"650,25","size":"100,100"}
+(display:"HUD")
+
+**Gullspike Castle** rises like a fist of stone. At the gate, two halberds bar your path.
+
+> Guard: "State your business. Be quick, the Regent hates delays."
+
+You weigh your options.
+
+(if: $amber > 0)[
+	* [[Present the amber token->Token Check]]
+]
+* [[Try to slip past when the bell tolls->Sneak]]
+* [[Challenge the guards outright->Fight]]
+
+
+:: Detained {"position":"1150,25","size":"100,100"}
+(display:"HUD")
+
+They take your gear and your pride in equal measure. The Regent prefers his victories tidy.
+
+> "A would-be hero without the measure to match."
+
+(goto: "Game Over")
+
+
+:: Fight {"position":"1025,25","size":"100,100"}
+(display:"HUD")
+
+You square your shoulders. Steel sings.
+
+You’re brave—but two halberds are still two halberds.  
+(set: $hp to $hp - 3)
+
+(if: $hp <= 0)[
+	(goto: "Game Over")
+]
+(else:)[
+	Bloodied but breathing, you stagger into a side entry as the alarm spreads.
+
+	(goto: "Throne")
+]
+
+
+:: Forest {"position":"400,25","size":"100,100"}
+(display:"HUD")
+
+The **Northwood** breathes cool and green. A fox watches from a stump; a crow pretends not to.  
+A moss-eaten mile marker points: **Shrine** (←) and **Castle Road** (→).
+
+You recall the bartender’s hint: “Old places remember old kings.”
+
+* [[Search the old shrine for a sign->Shrine]]
+* [[Take the road to the castle gates->Castle]]
+
+
+:: Game Over {"position":"175,200","size":"100,100"}
+(display:"HUD")
+
+💀 '''GAME OVER''' 💀  
+Your story pauses here—but stories can begin again.
+
+(link: "Play again")[
+	(set: $hp to 3)
+	(set: $amber to 0)
+	(goto: "Tavern")
+]
+
+
+:: HUD {"position":"150,25","size":"100,100"}
+''HP'': $hp • ''Amber Token'': $amber
+— ''Name'': $name
+––––––––––––––––––––
+
+
+:: Shrine {"position":"525,25","size":"100,100"}
+(display:"HUD")
+
+You find the **Wayshrine of True Measure** half-swallowed by ivy.  
+On the altar rests a thumb-sized **amber token**, warm to the touch.
+
+> Inscription: *“Show the measure of your courage, not the noise of your sword.”*
+
+(set: $amber to 1)
+
+You take the token. A low wind answers, as if the shrine approves.
+
+* [[Head to the castle->Castle]]
+* [[Circle back through the trees->Forest]]
+
+
+:: Sneak {"position":"900,25","size":"100,100"}
+(display:"HUD")
+
+You time the watch change with the chapel bell.  
+(set: _roll to (random:1,6))
+
+(if: _roll <= 3)[
+	A boot scuffs. A lantern flares.
+
+	> "Stop!"
+
+	(set: $hp to $hp - 2)
+
+	(if: $hp <= 0)[
+		(goto: "Game Over")
+	]
+	Elsewhere, a door groans open—hope flickers, but not for long.
+
+	(goto: "Detained")
+]
+(else:)[
+	You glide along the wall’s shadow and slide through a service door.
+
+	(goto: "Throne")
+]
+
+
+:: Tavern [start] {"position":"275,25","size":"100,100"}
+(display:"HUD")
+
+You come to on a splintered bench in **The Copper Tankard**. Lanternlight trembles.  
+The bartender polishes a glass, then fixes you with a weary eye.
+
+> "Trouble in the kingdom. Shadows on the roads, whispers of a false king.  
+> You'll help… or you'll finish that ale and go."
+
+*What do you do?*
+
+* [[Help the kingdom->Forest]]
+* [[Refuse and leave->Game Over]]
+
+(link: "Change your name")[
+	(prompt: "What should people call you?", $candidate)[
+		(set: $name to $candidate)
+		(replace: ?youare)[You are now **$name**.]
+	]
+]
+{(enchant: ?youare, (text-style:"italic"))}
+|youare>[You are **$name**.]
+
+
+:: Throne {"position":"25,175","size":"100,100"}
+(display:"HUD")
+
+The **throne hall** yawns long and cold. The Regent preens on a chair that isn’t his.  
+The old banner hangs half-covered by his sigil—and beneath the dust, the same amber glyph glows.
+
+> Regent: "Kneel, swear, and live."
+
+(if: $amber > 0)[
+	You lift the token. The glyph on the banner answers—stone remembers truth.
+
+	> A hush falls. The hall leans toward you.
+
+	(goto: "Victory")
+]
+(else:)[
+	Without the true sign, your words scatter like sparrows.
+
+	> Regent: "Guards."
+
+	(goto: "Game Over")
+]
+
+
+:: Token Check {"position":"775,25","size":"100,100"}
+(display:"HUD")
+
+You raise the **amber token**. The light in it stirs, and for a breath the world sharpens.
+
+> Old Guard (whispering): "The True Measure… We haven’t seen that since the last rightful line."
+
+The guards exchange a look, then stand aside.
+
+* [[Enter the throne hall->Throne]]
+
+
+:: Victory {"position":"325,200","size":"100,100"}
+(display:"HUD")
+
+🏆 '''VICTORY!''' 🏆
+
+The token’s light threads the old banner. The Regent pales; the guards lower steel.  
+In the quiet, the people in the shadows lift their heads.
+
+> "Long live the rightful measure."
+
+(link: "Play again")[
+	(set: $hp to 3)
+	(set: $amber to 0)
+	(goto: "Tavern")
+]
+
+
+:: startup {"position":"25,25","size":"100,100"}
+(set: $hp to 3)
+(set: $amber to 0)
+(set: $name to "Traveler")
