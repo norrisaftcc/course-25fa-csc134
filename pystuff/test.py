@@ -11,6 +11,10 @@ pygame.display.set_caption("Pygame Test Window")
 
 # --- Main Game Loop ---
 running = True
+x = width // 2
+y = height // 2
+radius = 50
+frames = 0
 while running:
     # Check for events (like closing the window)
     for event in pygame.event.get():
@@ -18,11 +22,18 @@ while running:
             running = False
 
     # Fill the screen with a color (white)
-    screen.fill((255, 255, 255))
+    screen.fill((0, 0, 0))
 
-    # Draw a simple blue circle
-    pygame.draw.circle(screen, (0, 0, 255), (width // 2, height // 2), 50)
+    # Draw a simple circle
+    
+    pygame.draw.circle(screen, (255, 0, 102), (x, y), radius)
 
+    # Slowly move the circle for next frame
+    frames = frames + 1
+    # only move the ball every 10 frames
+    if frames % 20 == 0:
+        x = x + 1
+        y = y + 1
     # Update the display
     pygame.display.flip()
 
