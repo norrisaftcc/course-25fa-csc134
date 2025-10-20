@@ -5,7 +5,7 @@ import sys
 pygame.init()
 
 # Set up the display
-width, height = 600, 400
+width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Bouncing Ball!")
 
