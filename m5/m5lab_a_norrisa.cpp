@@ -22,7 +22,9 @@ using namespace std;
 // CHARACTER DATA (Parallel Arrays)
 // ============================================================================
 // TEACHING POINT: Arrays let us store related data together
-
+// Common pattern: use a const for SIZE, then set up the arrays all SIZE in size.
+// That way, you don't have to resize or keep track if you add things.
+// it's const, declared out side of functions, so anyone can see it.
 const int NUM_CLASSES = 3;
 
 string classNames[NUM_CLASSES] = {"Warrior", "Mage", "Rogue"};
