@@ -30,10 +30,28 @@ int main() {
     int maxHP   = 100;
     int hp      = 30;
     const int healing = 10;
+    // characters to show the health bar
+    // Filled portion (green part):
+    string full ="█";   // Full block
+
+    // Empty portion (remaining):
+    string empty = "░";   // Light shade
+
+    // Brackets:
+    // "[" and "]"
 
     cout << "Resting until healed." << endl;
     while (hp < maxHP) {
         hp += healing;  
+        // Draw 10 blocks, full and empty depending on HP
+        cout << "[";
+        for (int i=0 ; i < hp/10; i++) {
+            cout << full;
+        }
+        for (int i=0; i < (100-hp)/10; i++) {
+            cout << empty;
+        }
+        cout << "]";
         cout << "HP: " << hp << "/" << maxHP << endl;
     }
     cout << "Fully rested." << endl;
