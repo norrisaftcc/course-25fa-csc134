@@ -6,6 +6,8 @@
 // Ask user for length and width of rectangle
 // then calculate and print the area.
 // (Use functions.)
+// For Practice:
+// Added a menu.
 
 #include <iostream>
 using namespace std;
@@ -16,6 +18,11 @@ using namespace std;
 // functions here.
 // The Declaration "promises" these functions will exist if called.
 
+// menu functions
+void menu_main();
+void menu_area();
+
+// rectangle functions
 double getLength(); // get the length
 double getWidth();  // get the width
 double getArea(double length, double width);   // *calculate* the area 
@@ -23,8 +30,41 @@ void   displayData(double length, double width, double area); // display the out
 
 int main()
 {
-	// This program calculates the area of a rectangle.
-	// TODO: fix any syntax errors
+    menu_main(); // start program      
+    return 0;
+}
+
+// MENU FUNCTIONS
+// menu functions
+void menu_main() {
+    // Main menu -- area, or quit.
+    cout << "MAIN MENU" << endl;
+    cout << "---------" << endl;
+    cout << "1. Area of a rectangle" << endl;
+    cout << "2. Exit" << endl;
+    cout << endl;
+    cout << "Enter choice: ";
+    int choice;
+    cin >> choice;
+
+    if (choice == 1) {
+        menu_area(); // call the area code
+        menu_main(); // run the menu again
+    }
+    else if (choice == 2) {
+        cout << "Goodbye." << endl;
+    }
+    else {
+        // invalid choice
+        cout << "Invalid choice." << endl << endl;
+        cin.clear(); // ignore the rest of the input
+        // Do it again
+        menu_main(); // This is called recursion
+    }
+}
+void menu_area() {
+    // Menu choice -- handles the area of a rectangle code. 
+    // This program calculates the area of a rectangle.
 	
    double length,    // The rectangle's length
           width,     // The rectangle's width
@@ -41,14 +81,10 @@ int main()
    
    // Display the rectangle's data.
    displayData(length, width, area);
-          
-   return 0;
 }
 
-//***************************************************
-// TODO: write the getLength, getWidth, getArea,    *
-// and displayData functions below.                 *
-//********************************
+
+// RECTANGLE FUNCTIONS
 // Remember, the Definition is fulfilling the "promise" of the Declarations.
 
 //getLength - Asks the user to enter a rectangle's length, and return that value as a double.
