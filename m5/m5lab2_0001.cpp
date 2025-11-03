@@ -34,10 +34,10 @@ int main()
    length = getLength();
    
    // Get the rectangle's width.
-   width = getWidth()
+   width = getWidth();
    
    // Get the rectangle's area.
-   area = getArea();
+   area = getArea(length, width);
    
    // Display the rectangle's data.
    displayData(length, width, area);
@@ -53,24 +53,30 @@ int main()
 
 //getLength - Asks the user to enter a rectangle's length, and return that value as a double.
 double getLength() {
-    cout << "Not implemented." << endl;
-    return 0.0;
+    double length;
+    cout << "What is the length? ";
+    cin >> length;
+    return length;
 }
-
 
 //getWidth - Asks the user to enter a rectangle's width, and return that value as a double.
 double getWidth() {
-    cout << "Not implemented." << endl;
-    return 0.0; 
+    double width;
+    cout << "What is the width? ";
+    cin >> width;
+    return width;
 }
 
 //getArea - This function should take two arguments, length and width. It will calculate the area and return that value as a double.
 double getArea(double length, double width) {
-    cout << "Not implemented." << endl;
-    return 0.0;
+    double area;
+    area = length * width; // because area is *calculated* not input.
+    return area;
 }
 
 // displayData - Void function, simply outputs the values in a readable format.
-void   displayData(double length, double width, double area) {
-    cout << "TODO: Display the data" << endl;
+void displayData(double length, double width, double area) {
+    cout << "Rectangle is " << length << " by " << width << "." << endl;
+    cout << "Area is: " << area << endl;
+    return; // for a void function, "return" is assumed at the end
 }
