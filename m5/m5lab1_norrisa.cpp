@@ -14,13 +14,15 @@ int getPlayerChoice(int maxChoice); // let player choose options
 
 
 // main()
-void main() {
+int main() {
     int choice;
     int max = 3;
     cout << "TESTING: Choose 1, 2, or 3." << endl;
     choice = getPlayerChoice(max);
     cout << "You chose: " << choice << endl;
 
+    // ending
+    return 0;
 }
 
 // Function definitions
