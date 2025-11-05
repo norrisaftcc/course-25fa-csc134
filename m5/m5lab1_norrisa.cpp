@@ -6,28 +6,38 @@ norrisa
 Uses "procedural programming".
 */
 
+#include <iostream>
+using namespace std;
 
-// ============================================================================
-// GAME LOGIC FUNCTIONS
-// ============================================================================
-// These functions handle the mechanics of running the game.
+// Function declarations
+int getPlayerChoice(int maxChoice); // let player choose options
 
+
+// main()
+void main() {
+    int choice;
+    int max = 3;
+    cout << "TESTING: Choose 1, 2, or 3." << endl;
+    choice = getPlayerChoice(max);
+    cout << "You chose: " << choice << endl;
+
+}
+
+// Function definitions
 /**
  * Get a valid choice from the player.
- *
- * @param maxChoice Highest valid choice number
- * @return Zero-based index of the chosen option
- *
+ * example: if maxChoice is 3, they can choose 1, 2, or 3.
  */
 int getPlayerChoice(int maxChoice) {
     int choice;
     while (true) {
         cout << "Your choice: ";
         cin >> choice;
+        // You can add extra validation if you want.
 
-        // Validate range (remember: player sees 1-N, we need 0-(N-1))
+        // Validate range 
         if (choice >= 1 && choice <= maxChoice) {
-            return choice;
+            return choice; // same number they enter
         }
 
         cout << "Please choose between 1 and " << maxChoice << ".\n";
