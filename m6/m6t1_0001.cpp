@@ -18,7 +18,7 @@ void method2();
 int main() {
     // Count # of Pokemon per day, two different ways
     method1();
-    //method2();
+    method2();
 
     return 0;
 }
@@ -42,33 +42,35 @@ void method1() {
         count++; // Move to next day
     }
     cout << "Total = " << poke_total << endl;
+    poke_avg = (double) poke_total / SIZE;
+    cout << "Average = " << poke_avg << endl;
 }
 
 void method2() {
-    // Method 2 - with arrays
-    const int SIZE = 3;
-    int temps[SIZE];
+    // Method 2 uses two arrays:
+    // Names of the days
+    // # pokemon found on the days
+
+    const int SIZE = 5;
+    string days[SIZE] = {"M", "T", "W", "Th", "F"}; // initialized
+    int pokemon[SIZE]; // not initialized
+    int poke_total = 0;
+    double poke_avg = 0.0;
 
     for (int i=0; i < SIZE; i++) {
-        // standard counting loop
-        cout << "Enter temp #" << i << ": ";
-        cin >> temps[i];
+        cout << "# on " << days[i] << ": ";
+        cin >> pokemon[i];
     }
+    // print output in "tabular" (table) format
+    cout << "Day\tPokemon" << endl;
     for (int i=0; i < SIZE; i++) {
-        cout << "Temp #" << i << " = " << temps[i] << endl;
+        cout << days[i] << "\t" << pokemon[i] << endl;
+        // find the total
+        poke_total += pokemon[i];
     }
+    // find total, print results
+    poke_avg = (double) poke_total / SIZE;
+    cout << "Total = " << poke_total << endl;
+    cout << "Average = " << poke_avg << endl;
 
-    // Same, but with while loop
-    int count=0;
-    while (count < SIZE) {
-        cout << "Temp #" << count << " = " << temps[count] << endl;
-        count++; // move to next
-    }
-
-    // Finally, with a do while
-    count = 0;
-    do {
-        cout << "Temp #" << count << " = " << temps[count] << endl;
-        count++; // move to next
-    } while (count < SIZE);
 }
