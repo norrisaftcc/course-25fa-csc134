@@ -41,7 +41,7 @@ int main() {
     
     cout << "╔════════════════════════════════════════╗" << endl;
     cout << "║     SLIME ROULETTE: SUPER SOAKER      ║" << endl;
-    cout << "║    The Work-Safe Russian Roulette     ║" << endl;
+    cout << "║    The Work-Safe Dare-Ya Roulette     ║" << endl;
     cout << "╚════════════════════════════════════════╝" << endl;
     cout << "\nRules:" << endl;
     cout << "🔵 Blue cartridges = Harmless water (you get another turn!)" << endl;
@@ -90,11 +90,11 @@ int main() {
 
 void setupGame() {
     // Clear any existing cartridges
-    superSoaker.clear();
+    superSoaker.clear(); // empty the vector
     
     // Load the super soaker with random cartridges
-    int waterCount = 2 + rand() % 3;  // 2-4 water cartridges
-    int slimeCount = 2 + rand() % 2;  // 2-3 slime cartridges
+    int waterCount = 1 + rand() % 3;  // 1-3 water cartridges
+    int slimeCount = 1 + rand() % 2;  // 1-2 slime cartridges
     
     loadSuperSoaker(waterCount, slimeCount);
     shuffleSuperSoaker();
@@ -117,7 +117,7 @@ void loadSuperSoaker(int waterCount, int slimeCount) {
 
 void shuffleSuperSoaker() {
     // Shuffle the cartridges so players don't know the order
-    random_shuffle(superSoaker.begin(), superSoaker.end());
+    shuffle(superSoaker.begin(), superSoaker.end());
 }
 
 // ============================================================================
@@ -167,6 +167,8 @@ char fireShot() {
         return 'E';  // Empty!
     }
     
+    // pop_back() would remove the last one
+    // removing the first one takes 2 steps as follows
     // Get the first cartridge
     char cartridge = superSoaker.front();
     
