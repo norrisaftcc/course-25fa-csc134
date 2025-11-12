@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrays to Vectors: Level Up</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fira+Code:wght@400;600&family=Rajdhani:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a0a1a 100%);
+            color: #e0e0e0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridScroll 20s linear infinite;
+        }
+        
+        @keyframes gridScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+        
+        .slide-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        
+        .slide {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #00ffff, #ff00ff, #00ffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            border-bottom: 3px solid #ff00ff;
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: #ff00ff;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+        
+        .subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            text-align: center;
+            color: #00ff88;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        
+        .content {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+        
+        ul {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+        
+        li {
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.4rem;
+        }
+        
+        li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00ffff;
+            font-size: 1.6rem;
+        }
+        
+        .emoji-list li::before {
+            content: attr(data-emoji);
+            font-size: 1.4rem;
+        }
+        
+        .code-box {
+            background: rgba(10, 10, 30, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            position: relative;
+        }
+        
+        .code-box::before {
+            content: 'C++';
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: #ff00ff;
+            color: #0a0a1a;
+            padding: 2px 12px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .code-box code {
+            color: #00ff88;
+        }
+        
+        .keyword { color: #ff00ff; }
+        .type { color: #00ffff; }
+        .string { color: #ffff00; }
+        .comment { color: #666; font-style: italic; }
+        .function { color: #00ff88; }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .comparison-box {
+            background: rgba(10, 10, 30, 0.6);
+            border: 2px solid;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+        
+        .comparison-box.bad {
+            border-color: #ff0055;
+            background: rgba(30, 0, 10, 0.4);
+        }
+        
+        .comparison-box.good {
+            border-color: #00ff88;
+            background: rgba(0, 30, 20, 0.4);
+        }
+        
+        .comparison-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+        
+        .bad h4 { color: #ff0055; }
+        .good h4 { color: #00ff88; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 1.2rem;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+        
+        th {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(255, 0, 255, 0.05);
+        }
+        
+        .highlight {
+            color: #00ffff;
+            font-weight: 600;
+        }
+        
+        .warning {
+            color: #ff0055;
+            font-weight: 600;
+        }
+        
+        .success {
+            color: #00ff88;
+            font-weight: 600;
+        }
+        
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            padding: 12px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .slide-counter {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff00ff;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            background: rgba(255, 0, 255, 0.1);
+            border-radius: 5px;
+        }
+        
+        /* Title slide specific */
+        .title-slide {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .title-slide h1 {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: #0a0a1a;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        
+        .glitch {
+            animation: glitch 1s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            33% { transform: translate(-2px, 2px); }
+            66% { transform: translate(2px, -2px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <h1 class="glitch">FROM ARRAYS TO VECTORS</h1>
+            <p class="subtitle">LEVELING UP YOUR DATA STRUCTURES</p>
+            <div style="margin-top: 3rem;">
+                <span class="tech-badge">CSC 134</span>
+                <span class="tech-badge">C++ STL</span>
+                <span class="tech-badge">WEEK 9</span>
+            </div>
+        </div>
+
+        <!-- Slide 2: The Problem -->
+        <div class="slide">
+            <h2>The Problem With Arrays</h2>
+            <div class="content">
+                <div class="code-box">
+<code><span class="keyword">const int</span> <span class="type">MAX_PARTY</span> = <span class="string">4</span>;  <span class="comment">// What if we want 5?</span>
+<span class="type">string</span> partyNames[MAX_PARTY];
+
+<span class="comment">// If we need more space... we're stuck</span></code>
+                </div>
+                
+                <ul class="emoji-list">
+                    <li data-emoji="❌">Fixed size at compile time</li>
+                    <li data-emoji="❌">No bounds checking (crashes!)</li>
+                    <li data-emoji="❌">Can't easily grow or shrink</li>
+                    <li data-emoji="❌">Manual size tracking everywhere</li>
+                    <li data-emoji="❌">Messy function interfaces</li>
+                </ul>
+                
+                <p style="margin-top: 2rem; font-size: 1.5rem; color: #ff00ff;">
+                    <strong>You've been fighting these limitations.</strong> Time for an upgrade.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Enter Vector -->
+        <div class="slide">
+            <h2>Enter: std::vector</h2>
+            <div class="content">
+                <div class="code-box">
+<code><span class="keyword">#include</span> <span class="string">&lt;vector&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;string&gt;</span>
+
+<span class="type">vector</span>&lt;<span class="type">string</span>&gt; partyNames;  <span class="comment">// Starts empty, grows as needed!</span></code>
+                </div>
+                
+                <h3>Vector Superpowers:</h3>
+                <ul class="emoji-list">
+                    <li data-emoji="✅">Dynamic size - grows and shrinks automatically</li>
+                    <li data-emoji="✅">Knows its own size (no separate SIZE variable)</li>
+                    <li data-emoji="✅">Bounds checking available (.at() method)</li>
+                    <li data-emoji="✅">Easy to add/remove elements</li>
+                    <li data-emoji="✅">Works with STL algorithms</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Cool Thing #1 -->
+        <div class="slide">
+            <h2>Cool Thing #1: Dynamic Growth</h2>
+            <div class="content">
+                <div class="code-box">
+<code><span class="keyword">void</span> <span class="function">addItem</span>(<span class="keyword">const</span> <span class="type">string</span>& item) {
+    inventory.<span class="function">push_back</span>(item);  <span class="comment">// Vector grows automatically!</span>
+    cout << <span class="string">"Added: "</span> << item << endl;
+}
+
+<span class="keyword">void</span> <span class="function">removeItem</span>(<span class="keyword">const</span> <span class="type">string</span>& item) {
+    <span class="keyword">auto</span> it = <span class="function">find</span>(inventory.<span class="function">begin</span>(), inventory.<span class="function">end</span>(), item);
+    
+    <span class="keyword">if</span> (it != inventory.<span class="function">end</span>()) {
+        inventory.<span class="function">erase</span>(it);  <span class="comment">// Vector shrinks automatically!</span>
+    }
+}</code>
+                </div>
+                
+                <p style="margin-top: 1.5rem; font-size: 1.5rem;">
+                    <span class="warning">Try this with an array:</span> Manual shifting, tracking "used" size, managing empty spaces...
+                </p>
+                <p style="margin-top: 1rem; font-size: 1.5rem;">
+                    <span class="success">Vectors handle all of this automatically.</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Cool Thing #2 -->
+        <div class="slide">
+            <h2>Cool Thing #2: Size Tracking</h2>
+            <div class="content">
+                <div class="code-box">
+<code><span class="keyword">void</span> <span class="function">displayInventory</span>() {
+    cout << <span class="string">"\n=== INVENTORY ("</span> << inventory.<span class="function">size</span>() 
+         << <span class="string">" items) ==="</span> << endl;
+    
+    <span class="keyword">if</span> (inventory.<span class="function">empty</span>()) {  <span class="comment">// Handy method!</span>
+        cout << <span class="string">"Empty inventory."</span> << endl;
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="string">0</span>; i < inventory.<span class="function">size</span>(); i++) {
+        cout << i + <span class="string">1</span> << <span class="string">". "</span> << inventory[i] << endl;
+    }
+}</code>
+                </div>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-box bad">
+                        <h4>Arrays</h4>
+                        <p>Separate <code>int currentSize</code> variable</p>
+                        <p>Manual updates everywhere</p>
+                        <p>Easy to get out of sync</p>
+                    </div>
+                    <div class="comparison-box good">
+                        <h4>Vectors</h4>
+                        <p>Automatic size tracking</p>
+                        <p>Always accurate</p>
+                        <p>One less thing to worry about!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Cool Thing #3 -->
+        <div class="slide">
+            <h2>Cool Thing #3: STL Algorithms</h2>
+            <div class="content">
+                <p style="font-size: 1.6rem; color: #00ffff; margin-bottom: 1.5rem;">
+                    <strong>This is where vectors truly shine.</strong> Modern C++ at its best.
+                </p>
+                
+                <div class="code-box">
+<code><span class="keyword">#include</span> <span class="string">&lt;algorithm&gt;</span>
+
+<span class="keyword">void</span> <span class="function">sortInventory</span>() {
+    <span class="function">sort</span>(inventory.<span class="function">begin</span>(), inventory.<span class="function">end</span>());
+    <span class="comment">// One line to sort! Try doing this with an array...</span>
+}
+
+<span class="keyword">bool</span> <span class="function">hasItem</span>(<span class="keyword">const</span> <span class="type">string</span>& item) {
+    <span class="comment">// Search without writing a loop</span>
+    <span class="keyword">return</span> <span class="function">find</span>(inventory.<span class="function">begin</span>(), inventory.<span class="function">end</span>(), item) 
+           != inventory.<span class="function">end</span>();
+}
+
+<span class="keyword">int</span> <span class="function">countPotions</span>() {
+    <span class="comment">// Count items matching a condition with lambdas!</span>
+    <span class="keyword">return</span> <span class="function">count_if</span>(inventory.<span class="function">begin</span>(), inventory.<span class="function">end</span>(),
+        [](const <span class="type">string</span>& item) {
+            <span class="keyword">return</span> item.<span class="function">find</span>(<span class="string">"Potion"</span>) != <span class="type">string</span>::npos;
+        });
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Comparison Table -->
+        <div class="slide">
+            <h2>Vector vs Array: Head-to-Head</h2>
+            <div class="content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Array</th>
+                            <th>Vector</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Size</strong></td>
+                            <td><span class="warning">Fixed at compile time</span></td>
+                            <td><span class="success">Dynamic</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Size Tracking</strong></td>
+                            <td><span class="warning">Manual</span></td>
+                            <td><span class="success">Automatic (.size())</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bounds Check</strong></td>
+                            <td><span class="warning">None</span></td>
+                            <td><span class="success">Available (.at())</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Add/Remove</strong></td>
+                            <td><span class="warning">Manual shifting</span></td>
+                            <td><span class="success">push_back(), erase()</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>STL Algorithms</strong></td>
+                            <td><span class="warning">Limited</span></td>
+                            <td><span class="success">Full support</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Function Passing</strong></td>
+                            <td><span class="warning">Array + size</span></td>
+                            <td><span class="success">Just vector</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 8: Global Vector Pattern -->
+        <div class="slide">
+            <h2>The Global Vector Pattern</h2>
+            <div class="content">
+                <div class="code-box">
+<code><span class="keyword">#include</span> <span class="string">&lt;vector&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;string&gt;</span>
+<span class="keyword">using namespace</span> std;
+
+<span class="comment">// Global inventory - multiple functions can access it</span>
+<span class="type">vector</span>&lt;<span class="type">string</span>&gt; inventory;
+
+<span class="keyword">void</span> <span class="function">addItem</span>(<span class="keyword">const</span> <span class="type">string</span>& item);
+<span class="keyword">void</span> <span class="function">removeItem</span>(<span class="keyword">const</span> <span class="type">string</span>& item);
+<span class="keyword">void</span> <span class="function">displayInventory</span>();
+<span class="keyword">void</span> <span class="function">sortInventory</span>();</code>
+                </div>
+                
+                <h3>Why This Works for Learning:</h3>
+                <ul>
+                    <li>Multiple functions naturally share game state</li>
+                    <li>See how different operations modify the vector</li>
+                    <li>Mirrors how game systems actually work</li>
+                    <li>Builds toward understanding parameter passing</li>
+                </ul>
+                
+                <p style="margin-top: 1.5rem; font-size: 1.3rem; color: #ff00ff;">
+                    <strong>Note:</strong> In production code, we'd use classes and encapsulation. But for learning functions with shared data, global vectors are a great teaching tool.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+            <div class="content">
+                <ul class="emoji-list" style="font-size: 1.6rem; margin-bottom: 2rem;">
+                    <li data-emoji="✨">Vectors are arrays with superpowers</li>
+                    <li data-emoji="✨">They manage their own size and memory</li>
+                    <li data-emoji="✨">They integrate with STL algorithms</li>
+                    <li data-emoji="✨">They're safer and more convenient</li>
+                    <li data-emoji="✨">They're the standard choice in modern C++</li>
+                </ul>
+                
+                <h3>Practice Challenges:</h3>
+                <div style="background: rgba(255, 0, 255, 0.1); padding: 1.5rem; border-radius: 10px; border: 2px solid #ff00ff;">
+                    <p><strong>1. Party Health Tracker:</strong> vector&lt;int&gt; for HP, add healAll(), damageParty(), getAverageHP()</p>
+                    <p style="margin-top: 1rem;"><strong>2. Quest Log System:</strong> vector&lt;string&gt; for quests, add/complete/sort features</p>
+                    <p style="margin-top: 1rem;"><strong>3. Inventory Enhancement:</strong> Add findItem(), displayRareItems(), getRandomItem()</p>
+                </div>
+                
+                <p style="margin-top: 2rem; font-size: 1.8rem; color: #00ffff; text-align: center;">
+                    <strong>Welcome to the STL. Let's build something awesome.</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="previousSlide()">◄ Previous</button>
+        <span class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">9</span></span>
+        <button class="nav-btn" onclick="nextSlide()">Next ►</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+    </script>
+</body>
+</html>
