@@ -117,7 +117,7 @@ void loadSuperSoaker(int waterCount, int slimeCount) {
 
 void shuffleSuperSoaker() {
     // Shuffle the cartridges so players don't know the order
-    shuffle(superSoaker.begin(), superSoaker.end());
+    random_shuffle(superSoaker.begin(), superSoaker.end());
 }
 
 // ============================================================================
