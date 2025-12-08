@@ -267,9 +267,9 @@ class RatingScreen:
             name_rect = name.get_rect(center=(SCREEN_WIDTH // 2, 150))
             surface.blit(name, name_rect)
 
-            # Star rating
+            # Star rating (using filled/empty star symbols)
             rating = package.calculate_rating()
-            stars = "*" * rating + "." * (5 - rating)
+            stars = "#" * rating + "-" * (5 - rating)
             stars_text = self.font_stars.render(stars, True, YELLOW)
             stars_rect = stars_text.get_rect(center=(SCREEN_WIDTH // 2, 220))
             surface.blit(stars_text, stars_rect)

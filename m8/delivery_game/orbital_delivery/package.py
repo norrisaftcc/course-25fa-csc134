@@ -28,6 +28,10 @@ class Package:
         self.delivery_time = 0.0  # Time in seconds
         self.crashed = False
 
+        # Cached values (generated once, then reused)
+        self._cached_review = None
+        self._cached_rating = None
+
         # Package personality (for display)
         self.names = {
             "fragile": ["Delicate Vase", "Antique Clock", "Crystal Set",
@@ -97,21 +101,27 @@ class Package:
     def generate_review(self):
         """
         Generate a text review based on rating and package type.
+        Reviews are cached after first generation to prevent flickering.
 
         Returns:
             String containing the package's review
         """
+        # Return cached review if already generated
+        if self._cached_review is not None:
+            return self._cached_review
+
         rating = self.calculate_rating()
 
         if self.crashed:
-            return self._generate_crash_review()
-
-        if self.package_type == "fragile":
-            return self._generate_fragile_review(rating)
+            self._cached_review = self._generate_crash_review()
+        elif self.package_type == "fragile":
+            self._cached_review = self._generate_fragile_review(rating)
         elif self.package_type == "urgent":
-            return self._generate_urgent_review(rating)
+            self._cached_review = self._generate_urgent_review(rating)
         else:
-            return "Delivery completed. No comment."
+            self._cached_review = "Delivery completed. No comment."
+
+        return self._cached_review
 
     def _generate_crash_review(self):
         """Generate review for a crashed delivery."""
@@ -167,11 +177,6 @@ class Package:
             return f"FRAGILE: {self.name}\nHandle with care!"
         else:
             return f"URGENT: {self.name}\nTime is critical!"
-
-    def get_stars_string(self):
-        """Get a string of star characters representing the rating."""
-        rating = self.calculate_rating()
-        return "*" * rating + "." * (5 - rating)
 
 
 def create_random_package():
