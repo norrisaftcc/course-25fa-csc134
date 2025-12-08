@@ -43,6 +43,12 @@ class Restaurant {
     double getRating() const {
         return rating;
     }
+
+    void printInfo() {
+        // Print all the info about the Restaurant
+        cout << "Restaurant Name: " << name << endl;
+        cout << "Rating: " << rating << " (out of 5)" << endl;
+    }
   
 };
 
@@ -55,8 +61,8 @@ int main() {
     //breakfast.rating = 3.5;
 
     // but with a class...
-    Restaurant breakfast   = new Restaurant("Biscuitville", 3.5);
-    Restaurant lunch       = new Restaurant("Mi Casita", 4.0);
+    Restaurant breakfast   = Restaurant("Biscuitville", 3.5);
+    Restaurant lunch       = Restaurant("Mi Casita", 4.0);
 
     // We'll use a new function, printInfo(), to display Restaurant info
     breakfast.printInfo();
