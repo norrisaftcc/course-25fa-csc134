@@ -12,12 +12,12 @@ import sys
 # Import game modules
 from constants import (
     SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BLACK,
-    STATE_ORBIT, STATE_DESCENT, STATE_LANDED, STATE_CRASHED, STATE_RATING, STATE_GAME_OVER,
-    LANDING_PAD_Y
+    STATE_ORBIT, STATE_DESCENT, STATE_RATING, STATE_GAME_OVER,
+    LANDING_PAD_Y, FALLING_FAST_VELOCITY
 )
 from physics import apply_gravity, apply_thrust, update_position, check_landing, get_altitude
 from ship import Ship
-from package import Package, create_random_package
+from package import create_random_package
 from level import Level, StarField
 from ui import HUD, MenuScreen, RatingScreen, GameOverScreen
 
@@ -174,7 +174,7 @@ class Game:
         # Check for out of fuel while still high up
         if self.ship.fuel <= 0 and self.ship.y < LANDING_PAD_Y - 100:
             # Let them fall a bit, but eventually game over
-            if self.ship.vel_y > 5:  # Falling fast
+            if self.ship.vel_y > FALLING_FAST_VELOCITY:
                 self.state = STATE_GAME_OVER
 
     def draw(self):

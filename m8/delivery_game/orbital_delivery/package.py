@@ -178,11 +178,6 @@ class Package:
         else:
             return f"URGENT: {self.name}\nTime is critical!"
 
-    def get_stars_string(self):
-        """Get a string of star characters representing the rating."""
-        rating = self.calculate_rating()
-        return "*" * rating + "." * (5 - rating)
-
 
 def create_random_package():
     """Create a random package type."""

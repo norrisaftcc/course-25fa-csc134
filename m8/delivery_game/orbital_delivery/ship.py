@@ -25,6 +25,7 @@ class Ship:
         self.fuel = STARTING_FUEL
         self.thrusting = False
         self.size = SHIP_SIZE
+        self._debris = None  # Cached debris positions for crash rendering
 
     def reset(self, x=SHIP_START_X, y=SHIP_START_Y):
         """Reset ship to starting state."""
@@ -35,6 +36,7 @@ class Ship:
         self.angle = 0.0
         self.fuel = STARTING_FUEL
         self.thrusting = False
+        self._debris = None  # Clear cached debris
 
     def rotate_left(self):
         """Rotate counter-clockwise."""
@@ -133,12 +135,18 @@ class Ship:
 
     def draw_crashed(self, surface):
         """Draw a crashed/destroyed ship."""
-        # Draw some debris triangles
-        import random
-        for i in range(4):
-            offset_x = random.randint(-20, 20)
-            offset_y = random.randint(-10, 10)
-            size = random.randint(3, 8)
+        # Generate debris once and cache it
+        if self._debris is None:
+            import random
+            self._debris = []
+            for _ in range(4):
+                offset_x = random.randint(-20, 20)
+                offset_y = random.randint(-10, 10)
+                size = random.randint(3, 8)
+                self._debris.append((offset_x, offset_y, size))
+
+        # Draw cached debris triangles
+        for offset_x, offset_y, size in self._debris:
             points = [
                 (self.x + offset_x, self.y + offset_y),
                 (self.x + offset_x + size, self.y + offset_y + size),

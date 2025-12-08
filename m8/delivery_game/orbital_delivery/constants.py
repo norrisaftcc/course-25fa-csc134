@@ -26,6 +26,7 @@ GRAVITY = 0.05              # Downward acceleration per frame
 THRUST_POWER = 0.12         # Upward acceleration when thrusting
 ROTATION_SPEED = 3.0        # Degrees per frame
 MAX_LANDING_VELOCITY = 2.0  # Maximum safe landing speed
+FALLING_FAST_VELOCITY = 5.0 # Velocity threshold for "falling fast" game over
 
 # =============================================================================
 # FUEL
