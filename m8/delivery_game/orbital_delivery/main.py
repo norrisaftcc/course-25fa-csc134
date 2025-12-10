@@ -13,7 +13,7 @@ import sys
 from constants import (
     SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BLACK,
     STATE_ORBIT, STATE_DESCENT, STATE_RATING, STATE_GAME_OVER,
-    LANDING_PAD_Y, FALLING_FAST_VELOCITY
+    LANDING_PAD_Y, FALLING_FAST_VELOCITY, SHIP_SCREEN_MARGIN
 )
 from physics import (
     apply_gravity, apply_thrust, update_position, check_landing,
@@ -69,8 +69,9 @@ class Game:
         self.ship.x = pad_info['center_x'] + lateral_offset
         self.ship.y = 80
 
-        # Clamp ship to screen bounds
-        self.ship.x = max(50, min(SCREEN_WIDTH - 50, self.ship.x))
+        # Final safety clamp to screen bounds
+        self.ship.x = max(SHIP_SCREEN_MARGIN,
+                          min(SCREEN_WIDTH - SHIP_SCREEN_MARGIN, self.ship.x))
 
         self.landed_successfully = False
         self.state = STATE_ORBIT

@@ -7,8 +7,12 @@ from constants import (
     SCREEN_WIDTH, SCREEN_HEIGHT,
     LANDING_PAD_WIDTH, LANDING_PAD_HEIGHT, LANDING_PAD_Y,
     TERRAIN_HEIGHT_BASE, TERRAIN_HEIGHT_PER_LEVEL, MAX_TERRAIN_HEIGHT,
-    TERRAIN_FLAT_ZONE_MARGIN,
-    GREEN, GRAY, DARK_GRAY, WHITE, RED
+    TERRAIN_FLAT_ZONE_MARGIN, TERRAIN_TRANSITION_WIDTH,
+    TERRAIN_WAVE_PRIMARY_FREQ, TERRAIN_WAVE_PRIMARY_AMP,
+    TERRAIN_WAVE_SECONDARY_FREQ, TERRAIN_WAVE_SECONDARY_AMP,
+    TERRAIN_WAVE_TERTIARY_FREQ, TERRAIN_WAVE_TERTIARY_AMP,
+    LATERAL_OFFSET_PER_LEVEL, MAX_LATERAL_OFFSET, SHIP_SCREEN_MARGIN,
+    GREEN, GRAY, DARK_GRAY, WHITE
 )
 
 
@@ -113,13 +117,16 @@ class Terrain:
                 y_offset = 0
 
                 # Primary wave (large hills)
-                y_offset += math.sin(x * 0.01 + random.random() * 0.5) * self.height_variation * 0.6
+                y_offset += (math.sin(x * TERRAIN_WAVE_PRIMARY_FREQ + random.random() * 0.5)
+                             * self.height_variation * TERRAIN_WAVE_PRIMARY_AMP)
 
                 # Secondary wave (medium features)
-                y_offset += math.sin(x * 0.025 + random.random()) * self.height_variation * 0.3
+                y_offset += (math.sin(x * TERRAIN_WAVE_SECONDARY_FREQ + random.random())
+                             * self.height_variation * TERRAIN_WAVE_SECONDARY_AMP)
 
                 # Tertiary wave (small bumps)
-                y_offset += math.sin(x * 0.05 + random.random() * 2) * self.height_variation * 0.1
+                y_offset += (math.sin(x * TERRAIN_WAVE_TERTIARY_FREQ + random.random() * 2)
+                             * self.height_variation * TERRAIN_WAVE_TERTIARY_AMP)
 
                 y = self.base_y - y_offset  # Negative because y increases downward
 
@@ -135,7 +142,7 @@ class Terrain:
             return
 
         flat_left, flat_right = self.flat_zone
-        transition_width = 40  # Pixels to smooth over
+        transition_width = TERRAIN_TRANSITION_WIDTH
 
         for i, (x, y) in enumerate(self.points):
             # Left transition (approaching flat zone)
@@ -248,8 +255,6 @@ class Level:
             return 0  # Level 1: start directly above pad
 
         # Calculate offset based on difficulty
-        from constants import LATERAL_OFFSET_PER_LEVEL, MAX_LATERAL_OFFSET
-
         base_offset = (self.difficulty - 1) * LATERAL_OFFSET_PER_LEVEL
         offset = min(base_offset, MAX_LATERAL_OFFSET)
 
@@ -261,10 +266,9 @@ class Level:
         proposed_x = pad_center + (offset * direction)
 
         # Clamp to screen bounds with margin
-        margin = 50
-        if proposed_x < margin:
+        if proposed_x < SHIP_SCREEN_MARGIN:
             direction = 1  # Force right
-        elif proposed_x > SCREEN_WIDTH - margin:
+        elif proposed_x > SCREEN_WIDTH - SHIP_SCREEN_MARGIN:
             direction = -1  # Force left
 
         return offset * direction
