@@ -2,7 +2,7 @@
 # No side effects - takes state in, returns new state
 
 import math
-from constants import GRAVITY, THRUST_POWER, MAX_LANDING_VELOCITY
+from constants import GRAVITY, THRUST_POWER, MAX_LANDING_VELOCITY, SHIP_SIZE
 
 
 def apply_gravity(vel_x, vel_y, dt=1.0):
@@ -68,7 +68,7 @@ def check_landing(x, y, vel_x, vel_y, pad_x, pad_y, pad_width, pad_height):
     Check if ship has landed on the pad.
 
     Args:
-        x, y: Ship position (center bottom of ship)
+        x, y: Ship position (center of ship)
         vel_x, vel_y: Ship velocity
         pad_x, pad_y: Landing pad top-left corner
         pad_width, pad_height: Landing pad dimensions
@@ -117,3 +117,29 @@ def get_speed(vel_x, vel_y):
 def get_altitude(y, ground_y):
     """Calculate altitude above ground."""
     return max(0, ground_y - y)
+
+
+def check_terrain_collision(x, y, terrain_height_func, ship_margin=None):
+    """
+    Check if ship has collided with terrain.
+
+    Args:
+        x, y: Ship position (center of ship)
+        terrain_height_func: Function that returns terrain Y at given X
+        ship_margin: Collision buffer around ship center (defaults to SHIP_SIZE)
+
+    Returns:
+        True if ship has collided with terrain, False otherwise
+    """
+    if ship_margin is None:
+        ship_margin = SHIP_SIZE
+
+    # Check collision at ship center and slightly to each side
+    check_points = [x - ship_margin, x, x + ship_margin]
+
+    for check_x in check_points:
+        terrain_y = terrain_height_func(check_x)
+        if y >= terrain_y:
+            return True
+
+    return False
