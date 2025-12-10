@@ -49,6 +49,20 @@ LANDING_PAD_HEIGHT = 10
 LANDING_PAD_Y = 550         # Y position of landing pad
 
 # =============================================================================
+# TERRAIN DIFFICULTY
+# =============================================================================
+TERRAIN_HEIGHT_BASE = 5          # Base terrain variation (pixels) at level 1
+TERRAIN_HEIGHT_PER_LEVEL = 10    # Additional height variation per level
+MAX_TERRAIN_HEIGHT = 80          # Cap on terrain roughness
+TERRAIN_FLAT_ZONE_MARGIN = 30    # Extra flat space on each side of landing pad
+
+# =============================================================================
+# SHIP STARTING POSITION (Lateral Offset)
+# =============================================================================
+LATERAL_OFFSET_PER_LEVEL = 60    # Pixels offset per difficulty level
+MAX_LATERAL_OFFSET = 300         # Maximum starting offset from pad
+
+# =============================================================================
 # FRAGILE PACKAGE - Rating thresholds (total delta-v experienced)
 # =============================================================================
 FRAGILE_EXCELLENT = 30      # 5 stars

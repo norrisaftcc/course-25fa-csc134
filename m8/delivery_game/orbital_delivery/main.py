@@ -15,7 +15,10 @@ from constants import (
     STATE_ORBIT, STATE_DESCENT, STATE_RATING, STATE_GAME_OVER,
     LANDING_PAD_Y, FALLING_FAST_VELOCITY
 )
-from physics import apply_gravity, apply_thrust, update_position, check_landing, get_altitude
+from physics import (
+    apply_gravity, apply_thrust, update_position, check_landing,
+    get_altitude, check_terrain_collision
+)
 from ship import Ship
 from package import create_random_package
 from level import Level, StarField
@@ -60,10 +63,14 @@ class Game:
         self.package = create_random_package()
         self.level = Level(self.difficulty)
 
-        # Position ship above the landing pad (with some offset)
+        # Position ship with lateral offset based on difficulty
         pad_info = self.level.get_pad_info()
-        self.ship.x = pad_info['center_x']
+        lateral_offset = self.level.get_ship_start_offset()
+        self.ship.x = pad_info['center_x'] + lateral_offset
         self.ship.y = 80
+
+        # Clamp ship to screen bounds
+        self.ship.x = max(50, min(SCREEN_WIDTH - 50, self.ship.x))
 
         self.landed_successfully = False
         self.state = STATE_ORBIT
@@ -146,7 +153,16 @@ class Game:
         if self.package:
             self.package.add_time(1.0 / FPS)
 
-        # Check for landing/crash
+        # Check for terrain collision (hills/valleys)
+        if check_terrain_collision(self.ship.x, self.ship.y,
+                                    self.level.get_terrain_height):
+            self.landed_successfully = False
+            if self.package:
+                self.package.mark_crashed()
+            self.state = STATE_RATING
+            return
+
+        # Check for landing/crash on pad
         pad_info = self.level.get_pad_info()
         result = check_landing(
             self.ship.x, self.ship.y,

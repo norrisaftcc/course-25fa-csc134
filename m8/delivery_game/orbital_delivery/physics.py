@@ -117,3 +117,26 @@ def get_speed(vel_x, vel_y):
 def get_altitude(y, ground_y):
     """Calculate altitude above ground."""
     return max(0, ground_y - y)
+
+
+def check_terrain_collision(x, y, terrain_height_func, ship_margin=10):
+    """
+    Check if ship has collided with terrain.
+
+    Args:
+        x, y: Ship position (center)
+        terrain_height_func: Function that returns terrain Y at given X
+        ship_margin: Collision buffer around ship center
+
+    Returns:
+        True if ship has collided with terrain, False otherwise
+    """
+    # Check collision at ship center and slightly to each side
+    check_points = [x - ship_margin, x, x + ship_margin]
+
+    for check_x in check_points:
+        terrain_y = terrain_height_func(check_x)
+        if y >= terrain_y:
+            return True
+
+    return False
